@@ -1,10 +1,13 @@
 package sch.ldg.aimasterygame.restTest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import sch.ldg.aimasterygame.ai.dto.UserRequestDTO;
+import sch.ldg.aimasterygame.ai.service.GeminiChatService;
 import sch.ldg.aimasterygame.restTest.dto.PromptDTO;
 import sch.ldg.aimasterygame.restTest.entity.TestEntity;
 import sch.ldg.aimasterygame.restTest.service.TestService;
@@ -12,13 +15,16 @@ import sch.ldg.aimasterygame.restTest.service.TestService;
 import java.util.List;
 
 @RestController
+
 public class RestTestController {
     private final TestService testService;
     private final ChatClient chatClient; //spring ai를 통한 채팅
+    private final GeminiChatService geminiChatService;
 
-    public RestTestController(TestService testService, ChatClient.Builder chatClient) {
+    public RestTestController(TestService testService, ChatClient.Builder chatClient, GeminiChatService geminiChatService) {
         this.testService = testService;
         this.chatClient = chatClient.build();
+        this.geminiChatService = geminiChatService;
     }
 
     @GetMapping("/test")
@@ -34,5 +40,10 @@ public class RestTestController {
     @PostMapping("/test-ai")
     public String testAi(@RequestBody PromptDTO promptDTO) {
         return chatClient.prompt(promptDTO.getPrompt()).call().content();
+    }
+
+    @PostMapping("/chat")
+    public String chat(@RequestBody UserRequestDTO dto) throws JsonProcessingException {
+        return geminiChatService.chat(dto);
     }
 }
