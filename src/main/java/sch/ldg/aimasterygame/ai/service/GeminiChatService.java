@@ -48,20 +48,18 @@ public class GeminiChatService {
                 .parts(Part.builder().text(prompt).build())
                 .build();
 
-        List<Content> payload = new ArrayList<>();
-        if (cacheName == null || cacheName.isBlank()) { //캐시 생성 안될 경우
-            payload.add(Content.builder()
-                    .role("system")
-                    .parts(Part.builder().text(systemPrompt).build())
-                    .build());
-        }
-
-        payload.addAll(deque);
+        List<Content> payload = new ArrayList<>(deque);
         payload.add(userMsg);
 
         GenerateContentConfig.Builder cfgBuilder = GenerateContentConfig.builder().temperature(TEMPERATURE);
         if (cacheName != null && !cacheName.isBlank()) {
             cfgBuilder.cachedContent(cacheName);
+        } else {
+            cfgBuilder.systemInstruction(
+                Content.builder()
+                    .parts(Part.builder().text(prompt).build())
+                    .build()
+            );
         }
 
         GenerateContentConfig cfg = cfgBuilder.build();
@@ -71,7 +69,7 @@ public class GeminiChatService {
 
         deque.addLast(userMsg);
         deque.addLast(Content.builder()
-                .role("assistant")
+                .role("model")
                 .parts(Part.builder().text(answer).build())
                 .build());
 
