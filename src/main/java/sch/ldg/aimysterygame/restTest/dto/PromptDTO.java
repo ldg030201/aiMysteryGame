@@ -1,4 +1,4 @@
-package sch.ldg.aimasterygame.restTest.dto;
+package sch.ldg.aimysterygame.restTest.dto;
 
 import lombok.Getter;
 import lombok.Setter;

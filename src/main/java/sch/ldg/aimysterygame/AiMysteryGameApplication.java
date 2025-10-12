@@ -1,13 +1,13 @@
-package sch.ldg.aimasterygame;
+package sch.ldg.aimysterygame;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AiMasteryGameApplication {
+public class AiMysteryGameApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AiMasteryGameApplication.class, args);
+		SpringApplication.run(AiMysteryGameApplication.class, args);
 	}
 
 }

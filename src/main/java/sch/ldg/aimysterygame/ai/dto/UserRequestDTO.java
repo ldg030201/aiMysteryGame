@@ -1,4 +1,4 @@
-package sch.ldg.aimasterygame.ai.dto;
+package sch.ldg.aimysterygame.ai.dto;
 
 
 import lombok.Getter;

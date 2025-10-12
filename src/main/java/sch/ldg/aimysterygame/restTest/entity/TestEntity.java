@@ -1,4 +1,4 @@
-package sch.ldg.aimasterygame.restTest.entity;
+package sch.ldg.aimysterygame.restTest.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

@@ -1,4 +1,4 @@
-package sch.ldg.aimasterygame.restTest;
+package sch.ldg.aimysterygame.restTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.ai.chat.client.ChatClient;
@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import sch.ldg.aimasterygame.ai.dto.UserRequestDTO;
-import sch.ldg.aimasterygame.ai.service.GeminiChatService;
-import sch.ldg.aimasterygame.restTest.dto.PromptDTO;
-import sch.ldg.aimasterygame.restTest.entity.TestEntity;
-import sch.ldg.aimasterygame.restTest.service.TestService;
+import sch.ldg.aimysterygame.ai.dto.UserRequestDTO;
+import sch.ldg.aimysterygame.ai.service.GeminiChatService;
+import sch.ldg.aimysterygame.restTest.dto.PromptDTO;
+import sch.ldg.aimysterygame.restTest.entity.TestEntity;
+import sch.ldg.aimysterygame.restTest.service.TestService;
 
 import java.util.List;
 

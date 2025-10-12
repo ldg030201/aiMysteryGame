@@ -1,9 +1,9 @@
 spring:
   application:
-    name: aiMasteryGame
+    name: aiMysteryGame
 
   datasource:
-    url: jdbc:mariadb://localhost:3306/ai-mastery-game
+    url: jdbc:mariadb://localhost:3306/ai-mystery-game
     username: root
     password: 6745
     driver-class-name: org.mariadb.jdbc.Driver
