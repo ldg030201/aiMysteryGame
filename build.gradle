@@ -6,7 +6,7 @@ plugins {
 
 group = 'sch.ldg'
 version = '0.0.1-SNAPSHOT'
-description = 'aiMasteryGame'
+description = 'aiMysteryGame'
 
 java {
     toolchain {

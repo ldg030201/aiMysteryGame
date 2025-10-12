@@ -1,10 +1,10 @@
-package sch.ldg.aimasterygame;
+package sch.ldg.aimysterygame;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AiMasteryGameApplicationTests {
+class AiMysteryGameApplicationTests {
 
 	@Test
 	void contextLoads() {

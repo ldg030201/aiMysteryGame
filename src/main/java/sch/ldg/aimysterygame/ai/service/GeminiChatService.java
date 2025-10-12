@@ -1,4 +1,4 @@
-package sch.ldg.aimasterygame.ai.service;
+package sch.ldg.aimysterygame.ai.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,7 +7,7 @@ import com.google.genai.errors.ClientException;
 import com.google.genai.types.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import sch.ldg.aimasterygame.ai.dto.UserRequestDTO;
+import sch.ldg.aimysterygame.ai.dto.UserRequestDTO;
 
 import java.time.Duration;
 import java.util.*;

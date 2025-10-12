@@ -1,8 +1,8 @@
-package sch.ldg.aimasterygame.restTest.service;
+package sch.ldg.aimysterygame.restTest.service;
 
 import org.springframework.stereotype.Service;
-import sch.ldg.aimasterygame.restTest.entity.TestEntity;
-import sch.ldg.aimasterygame.restTest.repository.TestRepository;
+import sch.ldg.aimysterygame.restTest.entity.TestEntity;
+import sch.ldg.aimysterygame.restTest.repository.TestRepository;
 
 import java.util.List;
 

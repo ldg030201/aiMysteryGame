@@ -1,4 +1,4 @@
-package sch.ldg.aimasterygame.webTest.controller;
+package sch.ldg.aimysterygame.webTest.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
