@@ -24,11 +24,12 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MariaDBDialect
     open-in-view: false
+    show-sql: true
 
 app:
   ai:
