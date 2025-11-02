@@ -42,8 +42,8 @@ public class RestTestController {
         return chatClient.prompt(promptDTO.getPrompt()).call().content();
     }
 
-    @PostMapping("/chat")
+    /*@PostMapping("/chat")
     public String chat(@RequestBody UserRequestDTO dto) throws JsonProcessingException {
         return geminiChatService.chat(dto);
-    }
+    }*/
 }
