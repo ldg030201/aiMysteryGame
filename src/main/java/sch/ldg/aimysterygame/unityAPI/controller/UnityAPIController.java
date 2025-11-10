@@ -1,14 +1,15 @@
 package sch.ldg.aimysterygame.unityAPI.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sch.ldg.aimysterygame.ai.dto.UserRequestDTO;
 import sch.ldg.aimysterygame.ai.service.GeminiChatService;
-
-import java.util.Map;
+import sch.ldg.aimysterygame.unityAPI.dto.gameData.GameDataDTO;
 
 @RestController
 @RequestMapping(("/chat"))
+@Slf4j
 public class UnityAPIController {
     private final GeminiChatService geminiChatService;
 
@@ -18,7 +19,8 @@ public class UnityAPIController {
 
     //게임 시작 (게임 셋업)
     @PostMapping("/startGame")
-    public ResponseEntity<Map<String, Object>> startGame(@RequestBody UserRequestDTO dto) {
+    public ResponseEntity<GameDataDTO> startGame(@RequestBody UserRequestDTO dto) {
+        log.debug("setUp 시작");
         return ResponseEntity.ok(geminiChatService.startGame(dto));
     }
 
