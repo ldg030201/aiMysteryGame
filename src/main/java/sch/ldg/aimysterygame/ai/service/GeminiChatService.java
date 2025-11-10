@@ -10,10 +10,12 @@ import com.google.genai.types.CreateCachedContentConfig;
 import com.google.genai.types.GenerateContentConfig;
 import com.google.genai.types.GenerateContentResponse;
 import com.google.genai.types.Part;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sch.ldg.aimysterygame.ai.dto.GameStateDTO;
 import sch.ldg.aimysterygame.ai.dto.UserRequestDTO;
+import sch.ldg.aimysterygame.unityAPI.dto.gameData.GameDataDTO;
 
 import java.time.Duration;
 import java.util.*;
@@ -37,12 +39,14 @@ public class GeminiChatService {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    private static final Gson GSON = new Gson();
+
     public GeminiChatService(Client genai) {
         this.genai = genai;
     }
 
     //설정단계
-    public Map<String, Object> startGame(UserRequestDTO dto) {
+    public GameDataDTO startGame(UserRequestDTO dto) {
         if (dto == null) throw new IllegalArgumentException("UserRequestDTO가 null입니다.");
         String userId = safeTrim(dto.getScenarioId());
         if (userId == null || userId.isEmpty()) throw new IllegalArgumentException("scenarioId는 필수입니다.");
@@ -90,7 +94,7 @@ public class GeminiChatService {
             throw new RuntimeException("셋업 응답에서 JSON을 추출하지 못했습니다. 응답 head: " + head);
         }
 
-        Map<String, Object> gameData = parseJsonToMap(json);
+        GameDataDTO gameData = GSON.fromJson(json, GameDataDTO.class);
         st.setGameData(gameData);
         st.setSetupComplete(true);
 
@@ -188,15 +192,6 @@ public class GeminiChatService {
             return MAPPER.writeValueAsString(o);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private Map<String, Object> parseJsonToMap(String json) {
-        try {
-            return MAPPER.readValue(json, Map.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("셋업 응답이 JSON이 아님: " + e.getMessage(), e);
         }
     }
 
