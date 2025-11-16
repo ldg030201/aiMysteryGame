@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메모장</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/memo.css">
+</head>
+<body>
+    <div class="desktop-wrapper">
+        <div class="phone-container">
+            <div class="phone-screen">
+                <div id="listView">
+                    <div class="app-header memo">
+                        <span class="back-button" onclick="goBack()">←</span>
+                        <h1>메모장</h1>
+                    </div>
+
+                    <div class="scrollable-content with-fab">
+                        <div class="list-item" onclick="openMemo(1)">
+                            <div class="memo-title">메모장 제목</div>
+                            <div class="memo-preview">메모장 일부만 보여주기</div>
+                            <div class="memo-date">2025.01.01 오후 01:01</div>
+                        </div>
+                    </div>
+
+                    <button class="floating-button memo" onclick="createNewMemo()">+</button>
+                </div>
+
+                <div class="memo-detail" id="detailView">
+                    <div class="app-header memo">
+                        <span class="back-button" onclick="closeMemo()">←</span>
+                        <h1>메모</h1>
+                        <button class="header-action" onclick="saveMemo()">완료</button>
+                    </div>
+
+                    <div class="memo-content-container">
+                        <input type="text" class="memo-detail-title" id="detailTitle" placeholder="제목">
+                        <textarea class="memo-detail-content" id="detailContent" placeholder="내용을 입력하세요..."></textarea>
+                        <div class="memo-detail-date" id="detailDate"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="memo-1" class="hidden" 
+         data-title="메모장 타이틀"
+         data-date="2025.01.01 오후 01:01"
+         data-content="메모장 데이터"></div>
+
+    <script src="/js/library/jquery-3.6.0.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/memo.js"></script>
+</body>
+</html>
