@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>갤러리</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/gallery.css">
+</head>
+<body>
+    <div class="desktop-wrapper">
+        <div class="phone-container">
+            <div class="phone-screen">
+                <div class="app-header gallery">
+                    <span class="back-button" onclick="goBack()">←</span>
+                    <h1>갤러리</h1>
+                </div>
+
+                <div class="scrollable-content">
+                    <div class="gallery-grid">
+                        <div class="gallery-item" data-title="사진 1" onclick="openImage(0)">
+                            <img src="/img/test.gif" alt="사진 1">
+                        </div>
+
+                        <div class="gallery-item" data-title="사진 1" onclick="openImage(0)">
+                            <img src="/img/test.gif" alt="사진 1">
+                        </div>
+
+                        <div class="gallery-item" data-title="사진 1" onclick="openImage(0)">
+                            <img src="/img/test.gif" alt="사진 1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="imageModal" onclick="closeModalOnBackground(event)">
+        <button class="modal-close" onclick="closeImageModal()">×</button>
+        <div class="modal-content-wrapper">
+            <div class="modal-image-container">
+                <button class="nav-button prev" onclick="event.stopPropagation(); prevImage()">‹</button>
+                <img class="modal-image" id="modalImage" src="" alt="사진">
+                <button class="nav-button next" onclick="event.stopPropagation(); nextImage()">›</button>
+            </div>
+            <div class="image-info" id="imageInfo">사진 1/3</div>
+        </div>
+    </div>
+
+    <script src="/js/library/jquery-3.6.0.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/gallery.js"></script>
+</body>
+</html>
