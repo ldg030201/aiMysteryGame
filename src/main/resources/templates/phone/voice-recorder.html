@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음성 녹음</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/voice-recorder.css">
+</head>
+<body>
+    <div class="desktop-wrapper">
+        <div class="phone-container">
+            <div class="phone-screen">
+                <div id="listView">
+                    <div class="app-header voice">
+                        <span class="back-button" onclick="goBack()">←</span>
+                        <h1>음성 녹음</h1>
+                    </div>
+
+                    <div class="scrollable-content">
+                        <div class="list-item" onclick="openChat(1)">
+                            <div class="recording-header">
+                                <div class="recording-icon">🎤</div>
+                                <div class="recording-info">
+                                    <div class="recording-title">npc이름</div>
+                                    <div class="recording-date">2020.01.01 오후 00:00</div>
+                                </div>
+                                <div class="recording-duration">03:33</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-view" id="chatView">
+                    <div class="app-header voice">
+                        <span class="back-button" onclick="closeChat()">←</span>
+                        <h1 id="chatTitle">대화 내용</h1>
+                    </div>
+
+                    <div class="chat-container" id="chatContainer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-1" class="hidden" data-title="npc이름">
+        <div class="chat-message left">
+            왼쪽 대화
+            <div class="message-time">00:01</div>
+        </div>
+        <div class="chat-message right">
+            오른쪽 대화
+            <div class="message-time">00:02</div>
+        </div>
+    </div>
+
+
+    <script src="/js/library/jquery-3.6.0.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/voice-recorder.js"></script>
+</body>
+</html>
