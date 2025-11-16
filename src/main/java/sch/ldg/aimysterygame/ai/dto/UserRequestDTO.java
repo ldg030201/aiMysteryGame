@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class UserRequestDTO {
-    public String scenarioId;
+    public String userId;
     public String playerInput;
     public String npcId;
     public List<String> knownClues;

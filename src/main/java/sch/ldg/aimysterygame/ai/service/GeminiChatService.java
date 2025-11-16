@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sch.ldg.aimysterygame.ai.dto.GameStateDTO;
 import sch.ldg.aimysterygame.ai.dto.UserRequestDTO;
+import sch.ldg.aimysterygame.phone.service.VoiceRecorderService;
 import sch.ldg.aimysterygame.unityAPI.dto.gameData.GameDataDTO;
 
 import java.time.Duration;
@@ -41,15 +42,18 @@ public class GeminiChatService {
 
     private static final Gson GSON = new Gson();
 
-    public GeminiChatService(Client genai) {
+    private final VoiceRecorderService voiceRecorderService;
+
+    public GeminiChatService(Client genai, VoiceRecorderService voiceRecorderService) {
         this.genai = genai;
+        this.voiceRecorderService = voiceRecorderService;
     }
 
     //설정단계
     public GameDataDTO startGame(UserRequestDTO dto) {
         if (dto == null) throw new IllegalArgumentException("UserRequestDTO가 null입니다.");
-        String userId = safeTrim(dto.getScenarioId());
-        if (userId == null || userId.isEmpty()) throw new IllegalArgumentException("scenarioId는 필수입니다.");
+        String userId = safeTrim(dto.getUserId());
+        if (userId == null || userId.isEmpty()) throw new IllegalArgumentException("userId는 필수입니다.");
 
         GameStateDTO st = stateByUser.computeIfAbsent(userId, k -> new GameStateDTO());
 
@@ -108,8 +112,8 @@ public class GeminiChatService {
     //플레이 단계
     public String talk(UserRequestDTO dto) {
         if (dto == null) throw new IllegalArgumentException("UserRequestDTO가 null입니다.");
-        String userId = safeTrim(dto.getScenarioId());
-        if (userId == null || userId.isEmpty()) throw new IllegalArgumentException("scenarioId는 필수입니다.");
+        String userId = safeTrim(dto.getUserId());
+        if (userId == null || userId.isEmpty()) throw new IllegalArgumentException("userId는 필수입니다.");
 
         GameStateDTO st = stateByUser.get(userId);
         if (st == null || !st.isSetupComplete() || st.getGameData() == null) {
@@ -179,6 +183,8 @@ public class GeminiChatService {
         st.getHistory().addLast(userMsg);
         st.getHistory().addLast(Content.builder().role("model").parts(Part.builder().text(answer).build()).build());
         trimToMax(st.getHistory(), MAX_RECENT_MESSAGES);
+
+        Integer vrnIdx = voiceRecorderService.findVrnIdxByNpcIdAndUserId(dto.getNpcId(), dto.getUserId());
 
         return answer;
     }
