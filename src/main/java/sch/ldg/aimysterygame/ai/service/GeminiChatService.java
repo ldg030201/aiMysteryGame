@@ -29,8 +29,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GeminiChatService {
     private final Client genai;
 
-    private final Map<String, GameStateDTO> stateByUser = new ConcurrentHashMap<>();
-
     private final Set<String> primedUsers = ConcurrentHashMap.newKeySet();
 
     @Value("${app.ai.system-prompt}")
@@ -46,10 +44,12 @@ public class GeminiChatService {
     private static final Gson GSON = new Gson();
 
     private final VoiceRecorderService voiceRecorderService;
+    private final GameStateStoreService gameStateStoreService;
 
-    public GeminiChatService(Client genai, VoiceRecorderService voiceRecorderService) {
+    public GeminiChatService(Client genai, VoiceRecorderService voiceRecorderService, GameStateStoreService gameStateStoreService) {
         this.genai = genai;
         this.voiceRecorderService = voiceRecorderService;
+        this.gameStateStoreService = gameStateStoreService;
     }
 
     //설정단계
@@ -60,7 +60,7 @@ public class GeminiChatService {
 
         dto.setMode("SETUP");
 
-        GameStateDTO st = stateByUser.computeIfAbsent(userId, k -> new GameStateDTO());
+        GameStateDTO st = gameStateStoreService.getStateByUser(dto.getUserId());
 
         if (st.getCacheName() == null) {
             st.setCacheName(createCacheForUser(userId));
@@ -131,7 +131,7 @@ public class GeminiChatService {
 
         dto.setMode("TALK");
 
-        GameStateDTO st = stateByUser.get(userId);
+        GameStateDTO st = gameStateStoreService.getStateByUser(dto.getUserId());
         if (st == null || !st.isSetupComplete() || st.getGameData() == null) {
             return "게임이 아직 준비되지 않았어요. 먼저 /startGame 을 호출해 주세요.";
         }
@@ -237,7 +237,7 @@ public class GeminiChatService {
 
         dto.setMode("VERDICT");
 
-        GameStateDTO st = stateByUser.get(userId);
+        GameStateDTO st = gameStateStoreService.getStateByUser(dto.getUserId());
         if (st == null || !st.isSetupComplete() || st.getGameData() == null) {
             throw new IllegalStateException("게임이 아직 준비되지 않았어요. 먼저 /startGame 을 호출해 주세요.");
         }
