@@ -18,7 +18,7 @@
                     </div>
 
                     <div class="app-grid">
-                        <div class="app-item" onclick="window.location.href='voice-recorder'">
+                        <div class="app-item" th:attr="data-url=@{/phone/voice-recorder(userId=${userId})}" onclick="window.location.href=this.dataset.url">
                             <div class="app-icon voice">🎤</div>
                             <div class="app-info">
                                 <h2>음성 녹음</h2>

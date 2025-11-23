@@ -18,12 +18,12 @@
                     </div>
 
                     <div class="scrollable-content">
-                        <div class="list-item" onclick="openChat(1)">
+                        <div class="list-item" th:each="npc : ${recordNpcList}" th:attr="data-npc-id=${npc.npcId}" onclick="openChat(this.dataset.npcId)">
                             <div class="recording-header">
                                 <div class="recording-icon">🎤</div>
                                 <div class="recording-info">
-                                    <div class="recording-title">npc이름</div>
-                                    <div class="recording-date">2020.01.01 오후 00:00</div>
+                                    <div class="recording-title">[[${npc.npcName}]]</div>
+                                    <div class="recording-date">[[${#temporals.format(npc.createDateTime, 'yyyy.MM.dd a hh:mm')}]]</div>
                                 </div>
                                 <div class="recording-duration">03:33</div>
                             </div>
