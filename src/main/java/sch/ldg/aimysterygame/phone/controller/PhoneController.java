@@ -1,6 +1,8 @@
 package sch.ldg.aimysterygame.phone.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -8,18 +10,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/phone")
 public class PhoneController {
     @GetMapping(value = "/qr")
-    public String qr() {
+    public String qr(HttpServletRequest request, Model model) {
+        String userId = request.getParameter("userId");
+        model.addAttribute("userId", userId);
+
         return "phone/qr";
     }
 
     @GetMapping(value = "/main")
-    public String phoneMain() {
-        return "phone/main";
-    }
+    public String phoneMain(HttpServletRequest request, Model model) {
+        String userId = request.getParameter("userId");
+        model.addAttribute("userId", userId);
 
-    @GetMapping(value = "/voice-recorder")
-    public String phoneVoiceRecorder() {
-        return "phone/voice-recorder";
+        return "phone/main";
     }
 
     @GetMapping(value = "/memo")

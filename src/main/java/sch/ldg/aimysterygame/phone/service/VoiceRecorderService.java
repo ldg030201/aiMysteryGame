@@ -10,6 +10,7 @@ import sch.ldg.aimysterygame.phone.repository.VoiceRecordNpcRepository;
 import sch.ldg.aimysterygame.unityAPI.dto.gameData.SuspectDTO;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class VoiceRecorderService {
@@ -53,5 +54,9 @@ public class VoiceRecorderService {
 
     public void createVoiceRecordInfo(VoiceRecordInfo userRecord) {
         voiceRecorderInfo.save(userRecord);
+    }
+
+    public List<VoiceRecordNpc> findRecordNpcByUserId(String userId) {
+        return voiceRecorderNpc.findByUserId(userId);
     }
 }

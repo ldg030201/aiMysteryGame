@@ -25,7 +25,7 @@
             아래 버튼을 눌러 PC에서 바로 사용하세요
         </div>
 
-        <a href="main" class="pc-button">
+        <a th:href="@{/phone/main(userId=${userId})}" class="pc-button">
             <span class="icon">💻</span>
             PC로 바로 보기
         </a>
@@ -33,6 +33,6 @@
 </body>
 
 <script type="text/javascript">
-    new QRCode(document.getElementById("qr-code"), window.location.host + "/phone/main");
+    new QRCode(document.getElementById("qr-code"), window.location.host + "/phone/main?userId=[[${userId}]]");
 </script>
 </html>
