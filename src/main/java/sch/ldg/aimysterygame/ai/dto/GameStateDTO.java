@@ -16,5 +16,7 @@ public class GameStateDTO {
     private GameDataDTO gameData;
     private boolean setupComplete;
 
-    private boolean contextPrimed;
+    private String trueKillerId;
+    private String trueKillerName;
+    private String trueCaseSummary;
 }
