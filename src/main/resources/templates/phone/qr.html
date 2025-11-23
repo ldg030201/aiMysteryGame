@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR 코드</title>
     <link rel="stylesheet" href="/css/qr.css">
+    <script src="/js/library/jquery-3.6.0.min.js"></script>
+    <script src="/js/library/qrcode.min.js"></script>
 </head>
 <body>
     <div class="qr-container">
@@ -14,9 +16,7 @@
         </div>
 
         <div class="qr-code-wrapper">
-            <div class="qr-code">
-                 <img src="/img/test.gif" alt="QR Code" style="width: 100%; height: 100%;">
-                <!--TODO-LDG 추후 QR 제작 후 변경-->
+            <div class="qr-code" id="qr-code">
             </div>
         </div>
 
@@ -31,4 +31,8 @@
         </a>
     </div>
 </body>
+
+<script type="text/javascript">
+    new QRCode(document.getElementById("qr-code"), window.location.host + "/phone/main");
+</script>
 </html>
