@@ -22,6 +22,7 @@ import sch.ldg.aimysterygame.phone.service.VoiceRecorderService;
 import sch.ldg.aimysterygame.unityAPI.dto.gameData.GameDataDTO;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -213,6 +214,7 @@ public class GeminiChatService {
                 .isUser(true)
                 .vrnInfo(voiceRecordNpc)
                 .contents(dto.getPlayerInput())
+                .createDateTime(LocalDateTime.now())
                 .build();
         voiceRecorderService.createVoiceRecordInfo(userRecord);
 
@@ -221,6 +223,7 @@ public class GeminiChatService {
                 .isUser(false)
                 .vrnInfo(voiceRecordNpc)
                 .contents(answer)
+                .createDateTime(LocalDateTime.now())
                 .build();
         voiceRecorderService.createVoiceRecordInfo(aiRecord);
 
