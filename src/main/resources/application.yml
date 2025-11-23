@@ -84,6 +84,8 @@ app:
       * setting 객체는 제거하고, 그 안의 background만 **최상위**로 노출.
       
       출력 스키마(JSON)
+      
+      게임은 크게 setup과 talk과 정답 맞추기인 check 3단계로 이루어져 있습니다.
       {
         "title": "사건 제목(15~30자)",
         "background": "사건 배경 서술(300~600자)",
@@ -119,35 +121,11 @@ app:
             "tamperable": true
           }
         ],
-        "timeline": [
-          { "t": "21:30", "location": "roomLobby", "who": ["npc001","npc004"], "event": "마감 준비" }
-        ],
         "publicView": {
           "overview": "플레이어용 개요(2~3문장, 정답 암시 금지)",
           "suspectSummaries": [
             { "npcId": "npc001", "text": "공개 요약(2~3문장)" }
           ]
-        },
-        "answerKey": {
-          "killerId": "npc00x",
-          "motive": "범행 동기(200~300자)",
-          "method": "수법/경로/시간대(120~200자)",
-          "falseStatements": [
-            { "npcId": "npc00x", "text": "명시적 거짓 진술" }
-          ],
-          "truthGates": [
-            "clueGlove AND clueLog2157",
-            "clueManualLight AND timeline@21:57"
-          ],
-          "redHerrings": [
-            { "clueId": "clueCctvShadow", "reason": "왜 오해를 유발하는지 1~2문장" }
-          ],
-          "requiredCluesToConvict": 2
-        },
-        "reportCenter": {
-          "description": "플레이어가 신고센터에 최종 용의자 이름과 추리 내용을 제출하면 AI가 판정",
-          "input": { "suspectName": "문자열", "reasoning": "문자열(핵심 논거 요약)" },
-          "output": { "correct": true, "feedback": "간단한 피드백(정답 유출 없이 힌트 가능)" }
         }
       }
       
