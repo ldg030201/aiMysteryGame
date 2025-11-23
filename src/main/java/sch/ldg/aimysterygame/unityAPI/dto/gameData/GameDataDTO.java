@@ -13,8 +13,5 @@ public class GameDataDTO {
     private MapDTO map;
     private List<SuspectDTO> suspects;
     private List<ClueDTO> clues;
-    private List<TimeDTO> timeline;
     private PublicViewDTO publicView;
-    private AnswerKeyDTO answerKey;
-    private ReportCenterDTO reportCenter;
 }
