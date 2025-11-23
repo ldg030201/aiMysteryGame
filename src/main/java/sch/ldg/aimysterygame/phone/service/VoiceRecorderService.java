@@ -1,6 +1,7 @@
 package sch.ldg.aimysterygame.phone.service;
 
 import org.springframework.stereotype.Service;
+import sch.ldg.aimysterygame.phone.entity.VoiceRecordInfo;
 import sch.ldg.aimysterygame.phone.entity.VoiceRecordNpc;
 import sch.ldg.aimysterygame.phone.repository.VoiceRecordInfoRepository;
 import sch.ldg.aimysterygame.phone.repository.VoiceRecordNpcRepository;
@@ -15,21 +16,26 @@ public class VoiceRecorderService {
         this.voiceRecorderInfo = voiceRecorderInfoRepository;
     }
 
-    public Integer findVrnIdxByNpcIdAndUserId(String npcId, String userId) {
-        VoiceRecordNpc vrnInfo = voiceRecorderNpc.findVrnIdxByNpcIdAndUserId(npcId, userId);
-        if (vrnInfo == null) {
-            VoiceRecordNpc npc = VoiceRecordNpc.builder()
+    public VoiceRecordNpc findByNpcIdAndUserId(String npcId, String userId) {
+        VoiceRecordNpc npc = voiceRecorderNpc.findByNpcIdAndUserId(npcId, userId);
+
+        if (npc == null) {
+            npc = VoiceRecordNpc.builder()
                     .userId(userId)
                     .npcId(npcId)
                     .build();
 
-            vrnInfo = createVoiceRecordNpc(npc);
+            return createVoiceRecordNpc(npc);
         }
 
-        return vrnInfo.getVrnIdx();
+        return npc;
     }
 
     public VoiceRecordNpc createVoiceRecordNpc(VoiceRecordNpc npc) {
         return voiceRecorderNpc.save(npc);
+    }
+
+    public void createVoiceRecordInfo(VoiceRecordInfo userRecord) {
+        voiceRecorderInfo.save(userRecord);
     }
 }

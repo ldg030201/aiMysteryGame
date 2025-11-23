@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import sch.ldg.aimysterygame.ai.dto.GameStateDTO;
 import sch.ldg.aimysterygame.ai.dto.UserRequestDTO;
 import sch.ldg.aimysterygame.ai.dto.VerdictResponseDTO;
+import sch.ldg.aimysterygame.phone.entity.VoiceRecordInfo;
+import sch.ldg.aimysterygame.phone.entity.VoiceRecordNpc;
 import sch.ldg.aimysterygame.phone.service.VoiceRecorderService;
 import sch.ldg.aimysterygame.unityAPI.dto.gameData.GameDataDTO;
 
@@ -204,7 +206,23 @@ public class GeminiChatService {
         st.getHistory().addLast(Content.builder().role("model").parts(Part.builder().text(answer).build()).build());
         trimToMax(st.getHistory(), MAX_RECENT_MESSAGES);
 
-        Integer vrnIdx = voiceRecorderService.findVrnIdxByNpcIdAndUserId(dto.getNpcId(), dto.getUserId());
+        VoiceRecordNpc voiceRecordNpc = voiceRecorderService.findByNpcIdAndUserId(dto.getNpcId(), dto.getUserId());
+
+        //유저 대화 삽입
+        VoiceRecordInfo userRecord = VoiceRecordInfo.builder()
+                .isUser(true)
+                .vrnInfo(voiceRecordNpc)
+                .contents(dto.getPlayerInput())
+                .build();
+        voiceRecorderService.createVoiceRecordInfo(userRecord);
+
+        //AI 답변
+        VoiceRecordInfo aiRecord = VoiceRecordInfo.builder()
+                .isUser(false)
+                .vrnInfo(voiceRecordNpc)
+                .contents(answer)
+                .build();
+        voiceRecorderService.createVoiceRecordInfo(aiRecord);
 
         return answer;
     }
