@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sch.ldg.aimysterygame.ai.dto.GameStateDTO;
 import sch.ldg.aimysterygame.ai.dto.UserRequestDTO;
+import sch.ldg.aimysterygame.ai.dto.VerdictResponseDTO;
 import sch.ldg.aimysterygame.phone.service.VoiceRecorderService;
 import sch.ldg.aimysterygame.unityAPI.dto.gameData.GameDataDTO;
 
@@ -55,15 +56,23 @@ public class GeminiChatService {
         String userId = safeTrim(dto.getUserId());
         if (userId == null || userId.isEmpty()) throw new IllegalArgumentException("userId는 필수입니다.");
 
+        dto.setMode("SETUP");
+
         GameStateDTO st = stateByUser.computeIfAbsent(userId, k -> new GameStateDTO());
 
         if (st.getCacheName() == null) {
             st.setCacheName(createCacheForUser(userId));
         }
 
+        Map<String, Object> meta = new LinkedHashMap<>();
+        meta.put("mode", dto.getMode());
+        meta.put("source", "gameSystem");
+        meta.put("userId", dto.getUserId());
+
         Content userMsg = Content.builder()
                 .role("user")
                 .parts(
+                        Part.builder().text("[META]\n" + toJson(meta)).build(),
                         Part.builder().text(
                                 "지금은 [셋업 단계]입니다. 외부 입력 없이 전부 스스로 정하고 시나리오를 생성하세요. " +
                                         "출력은 '오직 JSON 객체 하나'만. 코드블록/백틱/설명 텍스트 금지."
@@ -102,8 +111,11 @@ public class GeminiChatService {
         st.setGameData(gameData);
         st.setSetupComplete(true);
 
-        st.getHistory().clear();
+        st.setTrueKillerId(null);
+        st.setTrueKillerName(null);
+        st.setTrueCaseSummary(null);
 
+        st.getHistory().clear();
         primedUsers.remove(userId);
 
         return gameData;
@@ -114,6 +126,8 @@ public class GeminiChatService {
         if (dto == null) throw new IllegalArgumentException("UserRequestDTO가 null입니다.");
         String userId = safeTrim(dto.getUserId());
         if (userId == null || userId.isEmpty()) throw new IllegalArgumentException("userId는 필수입니다.");
+
+        dto.setMode("TALK");
 
         GameStateDTO st = stateByUser.get(userId);
         if (st == null || !st.isSetupComplete() || st.getGameData() == null) {
@@ -144,13 +158,20 @@ public class GeminiChatService {
                         "- 스포일러/정답 암시 금지(플레이어가 단서를 요구할 때만 간접 힌트).";
 
         Map<String, Object> userPayload = new LinkedHashMap<>();
+        userPayload.put("mode", dto.getMode());
         userPayload.put("npcId", dto.getNpcId());
         userPayload.put("playerInput", dto.getPlayerInput());
         userPayload.put("knownClues", dto.getKnownClues());
 
+        Map<String, Object> meta = new LinkedHashMap<>();
+        meta.put("mode", dto.getMode());
+        meta.put("source", "player");
+        meta.put("userId", dto.getUserId());
+
         Content userMsg = Content.builder()
                 .role("user")
                 .parts(
+                        Part.builder().text("[META]\n" + toJson(meta)).build(),
                         Part.builder().text(responseRules).build(),
                         Part.builder().text("[PLAYER_INPUT]\n" + toJson(userPayload)).build()
                 )
@@ -169,7 +190,6 @@ public class GeminiChatService {
                             .build()
             );
         }
-        // 가능 시 출력 길이/형식 힌트
         try {
             GenerateContentConfig.class
                     .getMethod("responseMimeType", String.class)
@@ -187,6 +207,114 @@ public class GeminiChatService {
         Integer vrnIdx = voiceRecorderService.findVrnIdxByNpcIdAndUserId(dto.getNpcId(), dto.getUserId());
 
         return answer;
+    }
+
+    //정답 판정
+    public VerdictResponseDTO checkAnswer(UserRequestDTO dto) {
+        if (dto == null) throw new IllegalArgumentException("UserRequestDTO가 null입니다.");
+        String userId = safeTrim(dto.getUserId());
+        if (userId == null || userId.isEmpty()) {
+            throw new IllegalArgumentException("userId는 필수입니다.");
+        }
+
+        dto.setMode("VERDICT");
+
+        GameStateDTO st = stateByUser.get(userId);
+        if (st == null || !st.isSetupComplete() || st.getGameData() == null) {
+            throw new IllegalStateException("게임이 아직 준비되지 않았어요. 먼저 /startGame 을 호출해 주세요.");
+        }
+
+        ensureTruthComputed(userId, st);
+
+        boolean correct = st.getTrueKillerId() != null
+                && dto.getKillerId() != null
+                && st.getTrueKillerId().equals(dto.getKillerId());
+
+        VerdictResponseDTO result = new VerdictResponseDTO();
+        result.setCorrect(correct);
+        result.setKillerName(st.getTrueKillerName() == null ? "" : st.getTrueKillerName());
+        result.setCaseSummary(st.getTrueCaseSummary() == null ? "" : st.getTrueCaseSummary());
+
+        return result;
+    }
+
+    private void ensureTruthComputed(String userId, GameStateDTO st) {
+        if (st.getTrueKillerId() != null) {
+            return; // 이미 계산됨
+        }
+
+        String rules =
+                "[CANONICAL_TRUTH]\n" +
+                        "- 아래 GAME_DATA는 이미 완성된 추리 게임 시나리오 전체 JSON입니다.\n" +
+                        "- 이 시나리오를 기준으로 실제 범인을 '정확히 한 명' 선택하세요.\n" +
+                        "- 플레이어의 선택은 아직 고려하지 마세요(여기서는 정답만 정의합니다).\n" +
+                        "- 출력은 오직 JSON 객체 하나만, 코드블록/백틱/추가 설명 텍스트 금지.\n" +
+                        "- JSON 스키마:\n" +
+                        "  {\"trueKillerId\": \"npc001 처럼 용의자 ID\", " +
+                        "   \"killerName\": \"실제 범인 이름\", " +
+                        "   \"caseSummary\": \"사건의 전말(동기+수법+주요 흐름, 스포일러 허용)\"}";
+
+        Map<String, Object> meta = new LinkedHashMap<>();
+        meta.put("mode", "CANONICAL_VERDICT");
+        meta.put("source", "system-truth");
+        meta.put("userId", userId);
+
+        Content userMsg = Content.builder()
+                .role("user")
+                .parts(
+                        Part.builder().text("[META]\n" + toJson(meta)).build(),
+                        Part.builder().text(rules).build(),
+                        Part.builder().text("[GAME_DATA]\n" + toJson(st.getGameData())).build()
+                )
+                .build();
+
+        List<Content> payload = List.of(userMsg);
+
+        GenerateContentConfig.Builder cfgBuilder = GenerateContentConfig.builder()
+                .temperature(TEMPERATURE);
+        if (isNonBlank(st.getCacheName())) {
+            cfgBuilder.cachedContent(st.getCacheName());
+        } else {
+            cfgBuilder.systemInstruction(
+                    Content.builder()
+                            .role("system")
+                            .parts(Part.builder().text(systemPrompt).build())
+                            .build()
+            );
+        }
+        try {
+            GenerateContentConfig.class
+                    .getMethod("responseMimeType", String.class)
+                    .invoke(cfgBuilder, "application/json");
+        } catch (Exception ignore) {}
+
+        try {
+            GenerateContentResponse resp = genai.models.generateContent(MODEL, payload, cfgBuilder.build());
+            String raw = resp.text();
+            String json = extractJsonObject(raw);
+            if (json != null) {
+                Map<String, Object> m = GSON.fromJson(json, Map.class);
+                Object tk = m.get("trueKillerId");
+                Object kn = m.get("killerName");
+                Object cs = m.get("caseSummary");
+
+                if (tk != null) st.setTrueKillerId(String.valueOf(tk));
+                if (kn != null) st.setTrueKillerName(String.valueOf(kn));
+                if (cs != null) st.setTrueCaseSummary(String.valueOf(cs));
+            }
+        } catch (Exception e) {
+            // 실패 시 truth는 null로 남고, 나중에 checkAnswer에서 correct=false + 빈 설명이 나가게 됨
+        }
+
+        if (st.getTrueKillerId() == null) {
+            st.setTrueKillerId("");
+        }
+        if (st.getTrueKillerName() == null) {
+            st.setTrueKillerName("");
+        }
+        if (st.getTrueCaseSummary() == null) {
+            st.setTrueCaseSummary("");
+        }
     }
 
     private void trimToMax(Deque<Content> deque, int max) {
