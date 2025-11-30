@@ -13,7 +13,7 @@
             <div class="phone-screen">
                 <div id="listView">
                     <div class="app-header voice">
-                        <span class="back-button" onclick="goBack()">←</span>
+                        <span class="back-button" th:attr="data-user-id=${userId}" onclick="goBack(this.dataset.userId)">←</span>
                         <h1>음성 녹음</h1>
                     </div>
 
