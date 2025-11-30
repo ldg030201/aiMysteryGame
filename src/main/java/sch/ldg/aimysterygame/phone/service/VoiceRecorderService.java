@@ -28,13 +28,7 @@ public class VoiceRecorderService {
         VoiceRecordNpc npc = voiceRecorderNpc.findByNpcIdAndUserId(npcId, userId);
 
         if (npc == null) {
-            GameStateDTO stateDto = gameStateStoreService.getStateByUser(userId);
-            String npcName = stateDto.getGameData().getSuspects().stream()
-                    .filter(dto -> npcId.equals(dto.getId()))
-                    .map(SuspectDTO::getName)
-                    .findFirst()
-                    .orElse("");
-
+            String npcName = gameStateStoreService.getNpcNameByNpcId(userId, npcId);
             npc = VoiceRecordNpc.builder()
                     .userId(userId)
                     .npcId(npcId)
