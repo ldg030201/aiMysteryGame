@@ -25,7 +25,7 @@
                                     <div class="recording-title">[[${npc.npcName}]]</div>
                                     <div class="recording-date">[[${#temporals.format(npc.createDateTime, 'yyyy.MM.dd a hh:mm')}]]</div>
                                 </div>
-                                <div class="recording-duration">03:33</div>
+                                <!--<div class="recording-duration">03:33</div>-->
                             </div>
                         </div>
                     </div>
@@ -45,17 +45,13 @@
         </div>
     </div>
 
-    <div id="chat-1" class="hidden" data-title="npc이름">
-        <div class="chat-message left">
-            왼쪽 대화
-            <div class="message-time">00:01</div>
-        </div>
-        <div class="chat-message right">
-            오른쪽 대화
-            <div class="message-time">00:02</div>
+    <div th:each="npc : ${recordNpcList}" th:id="'chat-' + ${npc.npcId}" th:class="'chat-container'">
+        <div th:each="msg : ${recordInfoMap[npc.vrnIdx]}"
+             th:class="'chat-message ' + (${msg.isUser} ? 'right' : 'left')">
+            <span th:text="${msg.contents}">메시지 내용</span>
+            <div class="message-time" th:text="${#temporals.format(msg.createDateTime, 'HH:mm')}">00:00</div>
         </div>
     </div>
-
 
     <script src="/js/library/jquery-3.6.0.min.js"></script>
     <script src="/js/common.js"></script>

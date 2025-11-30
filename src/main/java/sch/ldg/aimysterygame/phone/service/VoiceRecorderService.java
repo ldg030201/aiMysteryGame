@@ -59,4 +59,8 @@ public class VoiceRecorderService {
     public List<VoiceRecordNpc> findRecordNpcByUserId(String userId) {
         return voiceRecorderNpc.findByUserId(userId);
     }
+
+    public List<VoiceRecordInfo> findRecordInfoByVrnIdx(VoiceRecordNpc npc) {
+        return voiceRecorderInfo.findByVrnInfo(npc);
+    }
 }
