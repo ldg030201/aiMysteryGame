@@ -27,6 +27,7 @@ public class Memo {
     private String title;
 
     @Comment("메모내용")
+    @Column(columnDefinition = "TEXT")
     private String memo;
 
     @Comment("최종 수정일시 일시")

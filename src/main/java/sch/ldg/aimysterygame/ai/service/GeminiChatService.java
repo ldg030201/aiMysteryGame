@@ -18,6 +18,7 @@ import sch.ldg.aimysterygame.ai.dto.UserRequestDTO;
 import sch.ldg.aimysterygame.ai.dto.VerdictResponseDTO;
 import sch.ldg.aimysterygame.phone.entity.VoiceRecordInfo;
 import sch.ldg.aimysterygame.phone.entity.VoiceRecordNpc;
+import sch.ldg.aimysterygame.phone.service.MemoService;
 import sch.ldg.aimysterygame.phone.service.VoiceRecorderService;
 import sch.ldg.aimysterygame.unityAPI.dto.gameData.GameDataDTO;
 
@@ -46,11 +47,13 @@ public class GeminiChatService {
 
     private final VoiceRecorderService voiceRecorderService;
     private final GameStateStoreService gameStateStoreService;
+    private final MemoService memoService;
 
-    public GeminiChatService(Client genai, VoiceRecorderService voiceRecorderService, GameStateStoreService gameStateStoreService) {
+    public GeminiChatService(Client genai, VoiceRecorderService voiceRecorderService, GameStateStoreService gameStateStoreService, MemoService memoService) {
         this.genai = genai;
         this.voiceRecorderService = voiceRecorderService;
         this.gameStateStoreService = gameStateStoreService;
+        this.memoService = memoService;
     }
 
     //설정단계
@@ -120,6 +123,9 @@ public class GeminiChatService {
 
         st.getHistory().clear();
         primedUsers.remove(userId);
+
+        //npc 메모장 저장
+        memoService.saveNpcMemo(userId, gameData.getSuspects());
 
         return gameData;
     }
