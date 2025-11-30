@@ -12,7 +12,7 @@
         <div class="phone-container">
             <div class="phone-screen">
                 <div class="app-header gallery">
-                    <span class="back-button" onclick="goBack()">←</span>
+                    <span class="back-button" th:attr="data-user-id=${userId}" onclick="goBack(this.dataset.userId)">←</span>
                     <h1>갤러리</h1>
                 </div>
 

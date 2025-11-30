@@ -13,15 +13,17 @@
             <div class="phone-screen">
                 <div id="listView">
                     <div class="app-header memo">
-                        <span class="back-button" onclick="goBack()">←</span>
+                        <span class="back-button" th:attr="data-user-id=${userId}" onclick="goBack(this.dataset.userId)">←</span>
                         <h1>메모장</h1>
                     </div>
 
-                    <div class="scrollable-content with-fab">
-                        <div class="list-item" onclick="openMemo(1)">
-                            <div class="memo-title">메모장 제목</div>
-                            <div class="memo-preview">메모장 일부만 보여주기</div>
-                            <div class="memo-date">2025.01.01 오후 01:01</div>
+                    <div th:each="memo : ${memoList}" class="list-item" th:onclick="|openMemo(${memo.memoId})|">
+                        <div class="memo-title" th:text="${memo.title}">메모장 제목</div>
+                        <div class="memo-preview" th:text="${memo.memo.length() > 50 ? memo.memo.substring(0, 50) + '...' : memo.memo}">
+                            메모장 일부만 보여주기
+                        </div>
+                        <div class="memo-date" th:text="${#temporals.format(memo.updateDateTime, 'yyyy.MM.dd a hh:mm')}">
+                            2025.01.01 오후 01:01
                         </div>
                     </div>
 
@@ -45,10 +47,11 @@
         </div>
     </div>
 
-    <div id="memo-1" class="hidden" 
-         data-title="메모장 타이틀"
-         data-date="2025.01.01 오후 01:01"
-         data-content="메모장 데이터"></div>
+    <div th:each="memo : ${memoList}" th:id="'memo-' + ${memo.memoId}" class="hidden"
+        th:attr="
+         data-title=${memo.title},
+         data-date=${#temporals.format(memo.updateDateTime, 'yyyy.MM.dd a hh:mm')},
+         data-content=${memo.memo}"></div>
 
     <script src="/js/library/jquery-3.6.0.min.js"></script>
     <script src="/js/common.js"></script>

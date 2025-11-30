@@ -6,6 +6,6 @@ $(document).ready(function() {
     });
 });
 
-function goBack() {
-    window.location.href = 'main';
+function goBack(userId) {
+    window.location.href = 'main?userId=' + userId;
 }

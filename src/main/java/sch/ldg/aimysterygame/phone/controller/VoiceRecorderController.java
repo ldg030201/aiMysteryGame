@@ -23,6 +23,7 @@ public class VoiceRecorderController {
     @GetMapping(value = "/phone/voice-recorder")
     public String phoneVoiceRecorder(HttpServletRequest request, Model model) {
         String userId = request.getParameter("userId");
+        model.addAttribute("userId", userId);
 
         //npc 목록 가져오기
         List<VoiceRecordNpc> recordNpcList = voiceRecorderService.findRecordNpcByUserId(userId);
