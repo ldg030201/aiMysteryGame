@@ -1,9 +1,12 @@
 package sch.ldg.aimysterygame.phone.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sch.ldg.aimysterygame.phone.entity.Memo;
 import sch.ldg.aimysterygame.phone.service.MemoService;
 
@@ -26,8 +29,14 @@ public class MemoController {
         List<Memo> memoList = memoService.findMemoByUserId(userId);
         model.addAttribute("memoList", memoList);
 
-
-
         return "phone/memo";
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/memo/save")
+    public ResponseEntity<String> saveMemo(Memo memo, Model model) {
+        memoService.saveMemo(memo);
+
+        return ResponseEntity.ok("success");
     }
 }

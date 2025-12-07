@@ -59,4 +59,9 @@ public class MemoService {
             memoRepository.save(memo);
         }
     }
+
+    public void saveMemo(Memo memo) {
+        memo.setUpdateDateTime(LocalDateTime.now());
+        memoRepository.save(memo);
+    }
 }

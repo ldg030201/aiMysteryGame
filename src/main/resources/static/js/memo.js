@@ -1,4 +1,7 @@
+let nowMemoId = null;
+
 function openMemo(memoId) {
+    nowMemoId = memoId;
     let $memo = $('#memo-' + memoId);
     $('#detailTitle').val($memo.data('title'));
     $('#detailContent').val($memo.data('content'));
@@ -11,6 +14,7 @@ function openMemo(memoId) {
 }
 
 function createNewMemo() {
+    nowMemoId = null;
     $('#detailTitle').val('');
     $('#detailContent').val('');
     $('#detailDate').text('');
@@ -24,14 +28,27 @@ function closeMemo() {
     $('#detailView').removeClass('active');
 }
 
-function saveMemo() {
-    alert('메모가 저장되었습니다!');
-    //TODO-LDG 메모장 데이터 저장
-    closeMemo();
+function saveMemo(userId) {
+    $.ajax ('/memo/save', {
+        type: 'post'
+        , data: {
+            memoId: nowMemoId
+            , userId
+            , title: $('#detailTitle').val()
+            , memo: $('#detailContent').val()
+        }
+        , success: () => {
+            alert('메모가 저장되었습니다!');
+            location.reload();
+        }
+        , error: () => {
+            alert("저장 도중 오류가 발생하였습니다.");
+        }
+    });
 }
 
-$(document).ready(function() {
-    $('#detailContent').on('input', function() {
+$(document).ready(function () {
+    $('#detailContent').on('input', function () {
         $(this).css('height', 'auto').css('height', this.scrollHeight + 'px');
     });
 });
