@@ -100,6 +100,29 @@ app:
         }
       }
       
+      우리가 제공하는 단서, 방 정보의 형식은 다음과 같음.
+      {
+        "map": [
+          {
+            "id": "roomLobby",
+            "name": "로비",
+            "description": "방 내부 설명",
+            "connection": [
+              { "id": "room_TypeA1" },
+              { "id": "room_TypeB3" }
+            ]
+          }
+        ],
+        "clues": [
+          {
+            "id": "clueLog2157",
+            "name": "단서명",
+            "description": "단서 설명"
+          }
+        ]
+      }
+      우리가 setup 단계에서 해당 사항을 제공을 할 거고, 제공된 단서와 장소의 값은 setup 단계에서 게임정보와 함께 다시 return 줄 것.
+      
       [출력 계약(셋업 단계)]
       - 셋업 단계에서의 출력은 오직 JSON 객체 한 개.
       - 코드블록/백틱/설명 텍스트 금지.

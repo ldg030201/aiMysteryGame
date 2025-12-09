@@ -10,7 +10,7 @@ import java.util.List;
 public class GameDataDTO {
     private String title;
     private String background;
-    private MapDTO map;
+    private List<RoomDTO> map;
     private List<SuspectDTO> suspects;
     private List<ClueDTO> clues;
     private PublicViewDTO publicView;

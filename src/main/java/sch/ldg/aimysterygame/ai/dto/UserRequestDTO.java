@@ -2,6 +2,8 @@ package sch.ldg.aimysterygame.ai.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import sch.ldg.aimysterygame.unityAPI.dto.gameData.ClueDTO;
+import sch.ldg.aimysterygame.unityAPI.dto.gameData.RoomDTO;
 
 import java.util.List;
 
@@ -15,4 +17,6 @@ public class UserRequestDTO {
     public String mode;          // "SETUP", "TALK", "VERDICT"
     public String killerId;
     public String killerReason;
+    public List<RoomDTO> map;
+    public List<ClueDTO> clues;
 }

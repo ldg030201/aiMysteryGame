@@ -8,9 +8,5 @@ import lombok.Setter;
 public class ClueDTO {
     private String id;
     private String name;
-    private String type;
-    private String foundAt;
     private String description;
-    private String relevance;
-    private Boolean tamperable;
 }
