@@ -18,22 +18,12 @@
 
                 <div class="scrollable-content">
                     <div class="gallery-grid">
-                        <div class="gallery-item" data-title="사진 1" onclick="openImage(0)">
-                            <img src="/img/test.gif" alt="사진 1">
-                        </div>
-
-                        <div class="gallery-item" data-title="사진 1" onclick="openImage(0)">
-                            <img src="/img/test.gif" alt="사진 1">
-                        </div>
-
-                        <div class="gallery-item" data-title="사진 1" onclick="openImage(0)">
-                            <img src="/img/test.gif" alt="사진 1">
-                        </div>
-
-                        <div class="gallery-item" data-title="사진 4" onclick="openImage(0)">
-                            <img src="/img/test.gif" alt="사진 4">
+                        <div class="gallery-item"
+                             th:each="clue, stat : ${clueList}" th:attr="data-title=${clue.clueName}" th:onclick="|openImage(${stat.index})|">
+                            <img th:src="@{|/img/clue/${clue.clueImgId}.png|}" th:alt="${clue.clueName}">
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

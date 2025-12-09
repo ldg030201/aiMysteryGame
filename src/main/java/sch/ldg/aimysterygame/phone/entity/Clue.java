@@ -26,6 +26,9 @@ public class Clue {
     @Comment("단서 이미지 및 unity id")
     private String clueImgId;
 
+    @Comment("단서명")
+    private String clueName;
+
     @Comment("단서 획득 일시")
     private LocalDateTime createDateTime;
 }

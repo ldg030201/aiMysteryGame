@@ -34,7 +34,7 @@
                             </div>
                         </div>
 
-                        <div class="app-item" onclick="window.location.href='gallery'">
+                        <div class="app-item" th:attr="data-url=@{/phone/gallery(userId=${userId})}" onclick="window.location.href=this.dataset.url">
                             <div class="app-icon gallery">🖼️</div>
                             <div class="app-info">
                                 <h2>갤러리</h2>

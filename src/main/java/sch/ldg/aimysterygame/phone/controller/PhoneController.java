@@ -24,9 +24,4 @@ public class PhoneController {
 
         return "phone/main";
     }
-
-    @GetMapping(value = "/gallery")
-    public String phoneGallery() {
-        return "phone/gallery";
-    }
 }
