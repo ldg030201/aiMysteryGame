@@ -1,17 +1,36 @@
 # API 통신 JSON 예시
 
 ## 게임 시작
-### url: /chat/startGame
+### url: <a href="/chat/startGame">/chat/startGame</a>
 
 ```json
 {
     "userId": "test",
-    "mode": "SETUP"
+    "mode": "SETUP",
+    "map": [
+      {
+        "id": "roomLobby",
+        "name": "로비",
+        "description": "방 내부 설명",
+        "connection": [
+          { "id": "room_TypeA1" },
+          { "id": "room_TypeB3" }
+        ]
+      }
+    ],
+    "clues": [
+      {
+        "id": "clueLog2157",
+        "name": "단서명",
+        "description": "단서 설명",
+        "locationRoomId": "단서 위치 room id값"
+      }
+    ]
 } 
 ```
 
 ## npc 대화
-### url: /chat/talk
+### url: <a href="/chat/talk">/chat/talk</a>
 
 ```json
 {
@@ -23,8 +42,19 @@
 } 
 ```
 
+## 단서 획득
+### url: <a herf="/gallery/get-clue">/gallery/get-clue</a>
+
+```json
+{
+    "userId": "사용자ID",
+    "clueImgId": "imgId",
+    "clueName": "단서제목"
+}
+```
+
 ## 정답 맞추기
-### url: /chat/checkAnswer
+### url: <a href="/chat/checkAnswer">/chat/checkAnswer</a>
 
 ```json
 {

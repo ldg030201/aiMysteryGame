@@ -117,7 +117,7 @@ app:
           {
             "id": "clueLog2157",
             "name": "단서명",
-            "description": "단서 설명"
+            "description": "단서 설명",
             "locationRoomId": "단서 위치 room id값"
           }
         ]
