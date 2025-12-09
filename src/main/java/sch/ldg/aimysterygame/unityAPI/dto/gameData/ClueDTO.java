@@ -9,4 +9,5 @@ public class ClueDTO {
     private String id;
     private String name;
     private String description;
+    private String locationRoomId;
 }
