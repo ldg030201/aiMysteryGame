@@ -36,7 +36,8 @@ public class GeminiChatService {
     @Value("${app.ai.system-prompt}")
     private String systemPrompt;
 
-    private static final String MODEL = "gemini-2.5-pro";
+    private static final String MODEL = System.getProperty("MODEL");
+
     private static final float TEMPERATURE = 0.3f;
 
     private static final int MAX_RECENT_MESSAGES = 20; //전체는 20번 (사용자 + 시스템 요청)
