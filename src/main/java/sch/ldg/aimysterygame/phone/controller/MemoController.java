@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,7 +35,11 @@ public class MemoController {
 
     @ResponseBody
     @PostMapping(value = "/memo/save")
-    public ResponseEntity<String> saveMemo(Memo memo, Model model) {
+    public ResponseEntity<String> saveMemo(HttpServletRequest request) {
+        Memo memo = new Memo();
+        ServletRequestDataBinder binder = new ServletRequestDataBinder(memo);
+        binder.bind(request);
+
         memoService.saveMemo(memo);
 
         return ResponseEntity.ok("success");

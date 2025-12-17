@@ -25,6 +25,7 @@ public class VoiceRecordInfo {
     @Comment("녹음 npc 목록 idx")
     private VoiceRecordNpc vrnInfo;
 
+    @Lob
     @Comment("대화내용")
     private String contents;
 
